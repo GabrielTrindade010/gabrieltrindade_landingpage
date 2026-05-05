@@ -24,6 +24,12 @@ const TwitterIcon = () => (
   </svg>
 );
 
+const TiktokIcon = () => (
+  <svg viewBox="0 0 512 512" fill="currentColor" width="20" height="20">
+    <path d="M464.866 112.467c-53.742 0-97.465-43.724-97.465-97.467 0-8.284-6.716-15-15-15h-80.334c-8.284 0-15 6.716-15 15v329.367c0 31.595-25.705 57.299-57.301 57.299-31.595 0-57.299-25.704-57.299-57.299 0-31.596 25.704-57.301 57.299-57.301 8.284 0 15-6.716 15-15v-80.334c0-8.284-6.716-15-15-15-92.433 0-167.633 75.2-167.633 167.635C32.134 436.8 107.333 512 199.767 512s167.635-75.2 167.635-167.633v-145.79c29.855 15.915 63.073 24.224 97.465 24.224 8.284 0 15-6.716 15-15v-80.334c-.001-8.284-6.717-15-15.001-15z" />
+  </svg>
+);
+
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
   
@@ -41,17 +47,11 @@ export const Footer = () => {
           </div>
 
           <div className="flex gap-6">
-            <a href="/" className="text-white/40 hover:text-brand-primary transition-colors">
-              <LinkedinIcon />
-            </a>
-            <a href="/" className="text-white/40 hover:text-brand-primary transition-colors">
-              <GithubIcon />
-            </a>
-            <a href="/" className="text-white/40 hover:text-brand-primary transition-colors">
+            <a href="https://www.instagram.com/gabrieltrindade.tech" target="_blank" className="text-white/40 hover:text-brand-primary transition-colors">
               <InstagramIcon />
             </a>
-            <a href="/" className="text-white/40 hover:text-brand-primary transition-colors">
-              <TwitterIcon />
+            <a href="https://www.tiktok.com/@gabrieltrindade.tech" target="_blank" className="text-white/40 hover:text-brand-primary transition-colors">
+              <TiktokIcon />
             </a>
           </div>
           
