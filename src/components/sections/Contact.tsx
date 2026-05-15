@@ -1,10 +1,73 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, MessageCircle, Send } from "lucide-react";
 import { Button } from "../ui/Button";
 
 export const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "https://gabrieltrindade-landingpage-backend-tawny.vercel.app/api/contact",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || data.success !== true) {
+        throw new Error(data.error || "Erro ao enviar mensagem");
+      }
+
+      alert("Mensagem enviada com sucesso!");
+
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Erro ao enviar mensagem"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section id="contato" className="py-24 relative">
       <div className="max-w-7xl mx-auto px-6">
@@ -53,42 +116,72 @@ export const Contact = () => {
               </div>
             </div>
 
-            <motion.form 
+            <motion.form
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className="space-y-4"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubmit}
             >
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-white/70 ml-1">Nome</label>
-                  <input 
-                    type="text" 
+                  <label className="text-sm font-medium text-white/70 ml-1">
+                    Nome
+                  </label>
+
+                  <input
+                    type="text"
+                    name="name"
                     placeholder="Seu nome"
+                    value={formData.name}
+                    onChange={handleChange}
                     className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-primary/50 transition-colors"
                   />
                 </div>
+
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-white/70 ml-1">E-mail</label>
-                  <input 
-                    type="email" 
+                  <label className="text-sm font-medium text-white/70 ml-1">
+                    E-mail
+                  </label>
+
+                  <input
+                    type="email"
+                    name="email"
                     placeholder="Seu e-mail"
+                    value={formData.email}
+                    onChange={handleChange}
                     className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-primary/50 transition-colors"
                   />
                 </div>
               </div>
+
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white/70 ml-1">Mensagem</label>
-                <textarea 
+                <label className="text-sm font-medium text-white/70 ml-1">
+                  Mensagem
+                </label>
+
+                <textarea
+                  name="message"
                   placeholder="Como posso te ajudar?"
                   rows={4}
+                  value={formData.message}
+                  onChange={handleChange}
                   className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-primary/50 transition-colors resize-none"
                 />
               </div>
-            <Button variant="primary" className="w-full py-4 text-lg cursor-pointer">
-              <span className="flex items-center gap-2 whitespace-nowrap">Enviar mensagem <Send size={20} /></span>
-            </Button>
+
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={loading}
+                className="w-full py-4 text-lg cursor-pointer"
+              >
+                <span className="flex items-center justify-center gap-2 whitespace-nowrap">
+                  {loading ? "Enviando..." : "Enviar mensagem"}
+
+                  <Send size={20} />
+                </span>
+              </Button>
             </motion.form>
           </div>
         </div>
